@@ -63,7 +63,9 @@ class Account(Authenticate, ABC):
     
     def print_total(self):
         pass #fazer
+#---------------------------------------------------------------------------------
 
+#Classe de conta corrente
 class Current_account(Account, Tax):
     def __init__(self, number: str, client: str, balance: float, password: str,  limit: float):
         super().__init__(number, client, balance, password)
@@ -86,35 +88,46 @@ class Current_account(Account, Tax):
     @tax.setter
     def tax(self, value):
         self._tax = value
-        
+
+    #saque    
     def withdraw(self, value):
-        withdraw = value + self._tax
-        available = self._balance + self._limit
+        withdraw = value + self._tax #taxa por saque é 10 reais
+        available = self._balance + self._limit 
         
         if withdraw <= available:
             self.balance -= withdraw
-            print(f"the remaining value on the account is: {self._balance}")
-            transaction = Transaction("current", value, self)
+            print(f"the remaining value on the account is: {self._balance}") #valor disponivel na conta
+            transaction = Transaction("current", value, self) #ajusta o valor após o saque
             self._transactions.append(transaction)
         else:
-            print("no can do") #exception?
-            
+           raise #erro de que nao é possivel sacar -> Personalizado
+
+    #deposito        
     def deposit(self, value):
         deposit = value
         self._balance += deposit
-        
+
+    #valor da taxa    
     def get_tax_value(self):
         return self._balance * 0.07
         
-            
- # class a, b, c
- 
-    
+#---------------------------------------------------------------------------------
+
+
+#Conta poupanca  -> contrato(interface) é a classe Earning(ganhando/rendendo)     
 class Savings_account(Account, Earning):
     def __init__(self, number: str, titular: str, balance: float, password: str, earnings: float):
         super().__init__(number, titular, balance, password)
         self._earnings = earnings
         self._date = datetime.now().day
-        
+
+
     def get_Earning(self):
-        pass
+        self.balance 
+#---------------------------------------------------------------------------------
+
+
+conta = Current_account(12343, "rafa", 500, 1234, 1000)
+# print()
+conta.withdraw(200)
+conta.withdraw(200)
