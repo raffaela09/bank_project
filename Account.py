@@ -5,7 +5,7 @@ from Transaction import Transaction
 from Tax import Tax
 from Earning import Earning
 from datetime import datetime
-from Exceptions import InvalidValueDepositException, InvalidBalanceException
+from Exceptions import InvalidValueDepositException, InvalidBalanceException, InvalidPasswordException
 
 
 #Classe de conta, abstrata
@@ -49,12 +49,10 @@ class Account(Authenticate, ABC):
     def password(self, value):
         self._password = value
 
-   #----> ver sobre autenticacao dessa conta aq     
-    def authentication(self, password: str):
-        pass #nao tinha que ser abs? pra validar? 
     @abstractmethod
     def withdraw(self, value: float):
         pass
+
     @abstractmethod   
     def deposit(self, value: float):
         pass 
@@ -95,23 +93,27 @@ class Current_account(Account, Tax):
         self._tax = value
 
     #saque    
-    def withdraw(self, value):
+    def withdraw(self, value, password):
         withdraw = value + self._tax #taxa por saque é 10 reais
         available = self._balance + self._limit 
         
-        if withdraw <= available:
-            self.balance -= withdraw
-            print(f"the remaining value on the account is: {self._balance}") #valor disponivel na conta
-            transaction = Transaction("Saque - Conta Corrente", value, self) 
-            transaction.get_receipt()
-            self._transactions.append(transaction)
+        if self.auntheticate(password):
+            if withdraw <= available :
+                self.balance -= withdraw
+                print(f"Valor disponivel em conta: {self._balance}") #valor disponivel na conta
+                transaction = Transaction("Saque - Conta Corrente", value, self) 
+                transaction.get_receipt()
+                self._transactions.append(transaction)
+            else:
+                raise InvalidBalanceException("Saldo insuficiente.") #levanta a excecao
         else:
-           raise InvalidBalanceException("Saldo insuficiente.") #levanta a excecao
+            raise InvalidPasswordException("Senha incorreta.")
 
     #deposito        
     def deposit(self, value):
         deposit = value
-        if deposit >0 :
+        
+        if deposit > 0 :
             self._balance += deposit
             transaction = Transaction("Depósito - Conta Corrente", value, self) 
             self._transactions.append(transaction)
@@ -126,11 +128,11 @@ class Current_account(Account, Tax):
 #---------------------------------------------------------------------------------
 
 
-#arrumar autenticacao ->
-#colocar excecoes para caso nao esteja autenticado, nao poder fazer nenhuma transacao
-#colocar pra caso a conta seja diferente, n fazer transacao tbm 
-# finalizar menu
-#ver quem sabe um cadastro de contas?
+#arrumar autenticacao -> feito
+#colocar excecoes para caso nao esteja autenticado, nao poder fazer nenhuma transacao - feito
+#colocar pra caso a conta seja diferente, n fazer transacao tbm - feito 
+# finalizar menu - fazer
+#ver quem sabe um cadastro de contas? - no menu
 
 
 #Conta poupanca  -> contrato(interface) é a classe Earning(ganhando/rendendo)     
@@ -165,4 +167,4 @@ class Savings_account(Account, Earning):
 
 #---------------------------------------------------------------------------------
 conta = Current_account(12, "rafa", 500, "123", 560)
-conta.withdraw(400)
+conta.withdraw(400, "123")
