@@ -65,7 +65,10 @@ class Account(Authenticate, ABC):
             self._logged = True
         else:
             raise InvalidPasswordException
-
+    
+    def require_login(self):
+        if not self._logged:
+            raise
     
     def total(self):
         pass #-> o que seria?
