@@ -36,9 +36,17 @@ class Transaction:
         return self._date
 
     def get_receipt(self):
-        print("==========")
-        print(" RECIBO BANCÁRIO")
-        print("==========")
+        print("===================================")
+        print("         RECIBO BANCÁRIO")
+        print("===================================")
         print(f"Date: {self.date}")
+        print(f"Tipo de operação: {self.type}")
+        print(f"Conta: {self._account.number} ")
+        print(f"Cliente: {self._account.client}")
+        print(f"Valor: R${self.value}")
+        print(f"Saldo atual: R${self._account.balance}")
+        print(f"Obrigado por usar o nosso banco!")
+        print("===================================")
+        
         #terminar recibo
         

@@ -113,7 +113,7 @@ class Current_account(Account, Tax):
         deposit = value
         if deposit >0 :
             self._balance += deposit
-            transaction = Transaction("Depósito - Conta Corrente", value, self.number) 
+            transaction = Transaction("Depósito - Conta Corrente", value, self) 
             self._transactions.append(transaction)
             transaction.get_receipt()
         else:
