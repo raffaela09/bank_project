@@ -48,7 +48,8 @@ class Account(Authenticate, ABC):
     @password.setter
     def password(self, value):
         self._password = value
-        
+
+   #----> ver sobre autenticacao dessa conta aq     
     def authentication(self, password: str):
         pass #nao tinha que ser abs? pra validar? 
     @abstractmethod
@@ -62,10 +63,10 @@ class Account(Authenticate, ABC):
         return self._password == password 
     
     def total(Self):
-        pass
+        pass #-> o que seria?
     
     def print_total(self):
-        pass 
+        pass #-> o que seria? 
 #---------------------------------------------------------------------------------
 
 #Classe de conta corrente
@@ -101,16 +102,22 @@ class Current_account(Account, Tax):
         if withdraw <= available:
             self.balance -= withdraw
             print(f"the remaining value on the account is: {self._balance}") #valor disponivel na conta
-            transaction = Transaction("current", value, self) #ajusta o valor após o saque
+            transaction = Transaction("Saque - Conta Corrente", value, self) 
+            transaction.get_receipt()
             self._transactions.append(transaction)
         else:
-           raise InvalidBalanceException("Saldo insuficiente.")
+           raise InvalidBalanceException("Saldo insuficiente.") #levanta a excecao
 
     #deposito        
     def deposit(self, value):
         deposit = value
-        self._balance += deposit
-        #excecao pra numero negativo? -> nao permitir depositar um numero negativo, ou permitir fazer deposito a partir de determinado valor (1 real etc) -> personalizar
+        if deposit >0 :
+            self._balance += deposit
+            transaction = Transaction("Depósito - Conta Corrente", value, self.number) 
+            self._transactions.append(transaction)
+            transaction.get_receipt()
+        else:
+            raise InvalidValueDepositException("Não é permitido depósitos negativos.") #levanta a excecao
 
     #valor da taxa    
     def get_tax_value(self):
@@ -126,43 +133,29 @@ class Savings_account(Account, Earning):
         self._earnings = earnings
         self._date = datetime.now().day
 
-    #falta implementar saque e deposito -> ja que é heranca de account 
     def get_Earning(self):
-        print (self.balance * self._earnings)
+        return self.balance * self._earnings
 
     #na conta poupanca, nao é permitido que a o saldo fique negativo
     def withdraw(self, value):
         if value <= self._balance:
             self._balance -= value
+            transaction = Transaction("Saque - Conta Poupança", value, self) 
+            self._transactions.append(transaction)
+            transaction.get_receipt()
         else:
-            print("saldo insuficiente") #excecao personlizada de saldo insuficiente aqqui <-----
+            raise InvalidBalanceException("Saldo insuficiente.") #levanta a excecao
 
     def deposit(self, value):
+        deposit = value
         if value > 0: 
-            deposit = value
             self._balance += deposit
+            transaction = Transaction("Depósito - Conta Poupança", value, self) 
+            self._transactions.append(transaction)
+            transaction.get_receipt()
         else:
-            raise InvalidValueDepositException("Não é permitido depositos menores que zero.") 
-    
- 
+            raise InvalidValueDepositException("Não é permitido depositos menores que zero.") #levanta a excecao
+
 #---------------------------------------------------------------------------------
-
-
-conta = Current_account(12343, "rafa", 500, 1234, 1000)
-# print()
-conta.withdraw(200)
-conta.withdraw(200)
-conta.withdraw(200)
-conta.withdraw(200)
-conta.withdraw(200)
-conta.withdraw(200)
-conta.withdraw(200)
-conta.withdraw(200) #verifica a excecao de saque 
-
-poup = Savings_account("112f", "rafa", 500, 1234, 0.2)
-poup.get_Earning()
-# poup.deposit(-1) #funciona
-
-
-#---------> fazer recibos <---------
-#apos saque e apos deposito 
+conta = Current_account(12, "rafa", 500, "123", 560)
+conta.withdraw(400)
