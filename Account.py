@@ -126,6 +126,13 @@ class Current_account(Account, Tax):
 #---------------------------------------------------------------------------------
 
 
+#arrumar autenticacao ->
+#colocar excecoes para caso nao esteja autenticado, nao poder fazer nenhuma transacao
+#colocar pra caso a conta seja diferente, n fazer transacao tbm 
+# finalizar menu
+#ver quem sabe um cadastro de contas?
+
+
 #Conta poupanca  -> contrato(interface) é a classe Earning(ganhando/rendendo)     
 class Savings_account(Account, Earning):
     def __init__(self, number: str, titular: str, balance: float, password: str, earnings: float):
