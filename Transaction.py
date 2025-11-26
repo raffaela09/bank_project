@@ -46,7 +46,7 @@ class Transaction:
         print(f"Valor: R${self.value}")
         print(f"Saldo atual: R${self._account.balance}")
         print(f"Obrigado por usar o nosso banco!")
-        print("===================================")
+        print("===================================\n")
         
         #terminar recibo
         
