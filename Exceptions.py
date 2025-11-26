@@ -8,3 +8,8 @@ class InvalidBalanceException(Exception):
 
 class InvalidPasswordException(Exception):
     "Excecao para autenticacao, caso a senha esteja incorreta."
+    pass
+
+class RequireLoginException(Exception):
+    "Excecao para acoes que precisam de login"
+    pass

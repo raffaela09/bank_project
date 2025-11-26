@@ -3,8 +3,15 @@ from abc import ABC, abstractmethod
 class Authenticate(ABC):
     
     @abstractmethod
-    def auntheticate(self, password: str) -> bool:
+    def login(self, password: str):
+        pass    
+
+    @abstractmethod
+    def require_login(self):
         pass
     
+    @abstractmethod
+    def logout(self) -> bool:
+        pass
 
         

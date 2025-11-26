@@ -5,7 +5,7 @@ from Transaction import Transaction
 from Tax import Tax
 from Earning import Earning
 from datetime import datetime
-from Exceptions import InvalidValueDepositException, InvalidBalanceException, InvalidPasswordException
+from Exceptions import InvalidValueDepositException, InvalidBalanceException, InvalidPasswordException, RequireLoginException
 
 #ver de guardar um status de talvez logado 
 
@@ -68,7 +68,11 @@ class Account(Authenticate, ABC):
     
     def require_login(self):
         if not self._logged:
-            raise
+            raise RequireLoginException("É necessário estar logado para realizar essa ação.")
+    
+    def logout(self) -> bool:
+        self._logged = False
+        return self._logged
     
     def total(self):
         pass #-> o que seria?
