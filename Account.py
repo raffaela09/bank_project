@@ -7,6 +7,7 @@ from Earning import Earning
 from datetime import datetime
 from Exceptions import InvalidValueDepositException, InvalidBalanceException, InvalidPasswordException
 
+#ver de guardar um status de talvez logado 
 
 #Classe de conta, abstrata
 class Account(Authenticate, ABC):
@@ -15,6 +16,7 @@ class Account(Authenticate, ABC):
         self._client = client
         self._balance = balance
         self._password = password
+        self._logged = False 
         self._transactions: List['Transaction'] = []
 
     @property
@@ -57,10 +59,15 @@ class Account(Authenticate, ABC):
     def deposit(self, value: float):
         pass 
     
-    def auntheticate(self, password: str) -> bool:
-        return self._password == password 
+    #fucao para fazer login
+    def login(self, password: str):
+        if password == self._password:
+            self._logged = True
+        else:
+            raise InvalidPasswordException
+
     
-    def total(Self):
+    def total(self):
         pass #-> o que seria?
     
     def print_total(self):
@@ -125,18 +132,10 @@ class Current_account(Account, Tax):
             raise InvalidPasswordException("Senha inválida.")
 
     #valor da taxa    
-    def get_tax_value(self):
-        return self._balance * 0.07 
+    def get_tax_value(self) -> float:
+        return f"Valor da taxa: {self._balance * 0.07}"
         
 #---------------------------------------------------------------------------------
-
-
-#arrumar autenticacao -> feito
-#colocar excecoes para caso nao esteja autenticado, nao poder fazer nenhuma transacao - feito
-#colocar pra caso a conta seja diferente, n fazer transacao tbm - feito 
-# finalizar menu - fazer
-#ver quem sabe um cadastro de contas? - no menu
-
 
 #Conta poupanca  -> contrato(interface) é a classe Earning(ganhando/rendendo)     
 class Savings_account(Account, Earning):
@@ -175,7 +174,3 @@ class Savings_account(Account, Earning):
             raise InvalidPasswordException("Senha inválida.")
 
 #---------------------------------------------------------------------------------
-conta = Current_account(12, "rafa", 500, "123", 560)
-conta2 = Savings_account(11, "rafa", 500, "123", 0.2)
-conta.withdraw(400, "123")
-conta2.withdraw(200, "123")
