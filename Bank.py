@@ -3,8 +3,6 @@ from typing import List
 from abc import ABC, abstractmethod
 from Branch import Branch
 
-
-
 class Bank:
     def __init__(self, name: str, cnpj: str, location: str, phone: str):
         self._name = name

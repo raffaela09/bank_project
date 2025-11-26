@@ -6,6 +6,8 @@ from Tax import Tax
 from Earning import Earning
 from datetime import datetime
 
+
+#Classe de conta, abstrata
 class Account(Authenticate, ABC):
     def __init__(self, number: str, client: str, balance: float, password: str):
         self._number = number
@@ -47,22 +49,22 @@ class Account(Authenticate, ABC):
         self._password = value
         
     def authentication(self, password: str):
-        pass #ajeitar e colocar as exception
+        pass 
     @abstractmethod
     def withdraw(self, value: float):
         pass
     @abstractmethod   
     def deposit(self, value: float):
-        pass #fazer e colocar exception personalizada
+        pass 
     
     def auntheticate(self, password: str) -> bool:
         return self._password == password
     
     def total(Self):
-        pass #fazer 
+        pass
     
     def print_total(self):
-        pass #fazer
+        pass 
 #---------------------------------------------------------------------------------
 
 #Classe de conta corrente
@@ -106,10 +108,11 @@ class Current_account(Account, Tax):
     def deposit(self, value):
         deposit = value
         self._balance += deposit
+        #excecao pra numero negativo? -> nao permitir depositar um numero negativo, ou permitir fazer deposito a partir de determinado valor (1 real etc) -> personalizar
 
     #valor da taxa    
     def get_tax_value(self):
-        return self._balance * 0.07
+        return self._balance * 0.07 
         
 #---------------------------------------------------------------------------------
 
@@ -121,9 +124,23 @@ class Savings_account(Account, Earning):
         self._earnings = earnings
         self._date = datetime.now().day
 
-
+    #falta implementar saque e deposito -> ja que é heranca de account 
     def get_Earning(self):
-        self.balance 
+        print (self.balance * self._earnings)
+
+    def withdraw(self, value):
+        if value <= self._balance:
+            self._balance -= value
+        else:
+            print("saldo insuficiente") #excecao personlizada de saldo insuficiente aqqui <-----
+
+    def deposit(self, value):
+        if value > 0: 
+            deposit = value
+            self._balance += deposit
+        else:
+            print("Não é permitido fazer deposito com numeros negativos") #excecao personalizada para nao permitir numeros negativo - faz sentido?
+        #vale uma excecao pra nao permitir 
 #---------------------------------------------------------------------------------
 
 
@@ -131,3 +148,6 @@ conta = Current_account(12343, "rafa", 500, 1234, 1000)
 # print()
 conta.withdraw(200)
 conta.withdraw(200)
+
+poup = Savings_account("112f", "rafa", 500, 1234, 0.2)
+poup.get_Earning()
