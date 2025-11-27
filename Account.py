@@ -7,8 +7,6 @@ from Earning import Earning
 from datetime import datetime
 from Exceptions import InvalidValueDepositException, InvalidBalanceException, InvalidPasswordException, RequireLoginException
 
-#ver de guardar um status de talvez logado 
-
 #Classe de conta, abstrata
 class Account(Authenticate, ABC):
     def __init__(self, number: str, client: str, balance: float, password: str):
@@ -111,6 +109,7 @@ class Current_account(Account, Tax):
     #saque    
     def withdraw(self, value: float, password: str):
         withdraw = value + self._tax #taxa por saque é 10 reais
+
         available = self._balance + self._limit 
         self.require_login()
 
@@ -136,7 +135,6 @@ class Current_account(Account, Tax):
             transaction.get_receipt()
         else:
             raise InvalidValueDepositException("Não é permitido depósitos negativos.") #levanta a excecao
-
 
     #valor da taxa    
     def get_tax_value(self) -> float:
