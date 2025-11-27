@@ -65,11 +65,13 @@ class Account(Authenticate, ABC):
             self._logged = True
         else:
             raise InvalidPasswordException
-    
+
+    #para acoes que precisam de login  
     def require_login(self):
         if not self._logged:
             raise RequireLoginException("É necessário estar logado para realizar essa ação.")
     
+    #para sair
     def logout(self) -> bool:
         self._logged = False
         return self._logged
@@ -110,33 +112,31 @@ class Current_account(Account, Tax):
     def withdraw(self, value: float, password: str):
         withdraw = value + self._tax #taxa por saque é 10 reais
         available = self._balance + self._limit 
-        
-        if self.auntheticate(password):
-            if withdraw <= available :
-                self.balance -= withdraw
-                print(f"Valor disponivel em conta: {self._balance}") #valor disponivel na conta
-                transaction = Transaction("Saque - Conta Corrente", value, self) 
-                transaction.get_receipt()
-                self._transactions.append(transaction)
-            else:
-                raise InvalidBalanceException("Saldo insuficiente.") #levanta a excecao
+        self.require_login()
+
+        if withdraw <= available :
+            self.balance -= withdraw
+            print(f"Valor disponivel em conta: {self._balance}") #valor disponivel na conta
+            transaction = Transaction("Saque - Conta Corrente", value, self) 
+            transaction.get_receipt()
+            self._transactions.append(transaction)
         else:
-            raise InvalidPasswordException("Senha inválida.")
+                raise InvalidBalanceException("Saldo insuficiente.") #levanta a excecao
 
     #deposito        
     def deposit(self, value:float, password: str):
         deposit = value
         
-        if self.auntheticate(password):
-            if deposit > 0 :
-                self._balance += deposit
-                transaction = Transaction("Depósito - Conta Corrente", value, self) 
-                self._transactions.append(transaction)
-                transaction.get_receipt()
-            else:
-                raise InvalidValueDepositException("Não é permitido depósitos negativos.") #levanta a excecao
+        self.require_login()
+
+        if deposit > 0 :
+            self._balance += deposit
+            transaction = Transaction("Depósito - Conta Corrente", value, self) 
+            self._transactions.append(transaction)
+            transaction.get_receipt()
         else:
-            raise InvalidPasswordException("Senha inválida.")
+            raise InvalidValueDepositException("Não é permitido depósitos negativos.") #levanta a excecao
+
 
     #valor da taxa    
     def get_tax_value(self) -> float:
@@ -156,28 +156,24 @@ class Savings_account(Account, Earning):
 
     #na conta poupanca, nao é permitido que a o saldo fique negativo
     def withdraw(self, value: float, password: str):
-        if self.auntheticate(password):
-            if value <= self._balance:
-                self._balance -= value
-                transaction = Transaction("Saque - Conta Poupança", value, self) 
-                self._transactions.append(transaction)
-                transaction.get_receipt()
-            else:
-                raise InvalidBalanceException("Saldo insuficiente.") #levanta a excecao
+        self.require_login()
+        if value <= self._balance:
+            self._balance -= value
+            transaction = Transaction("Saque - Conta Poupança", value, self) 
+            self._transactions.append(transaction)
+            transaction.get_receipt()
         else:
-            raise InvalidPasswordException("Senha inválida.")
+            raise InvalidBalanceException("Saldo insuficiente.") #levanta a excecao
 
     def deposit(self, value:float, password: str):
         deposit = value
-        if self.auntheticate(password):
-            if value > 0: 
-                self._balance += deposit
-                transaction = Transaction("Depósito - Conta Poupança", value, self) 
-                self._transactions.append(transaction)
-                transaction.get_receipt()
-            else:
-                raise InvalidValueDepositException("Não é permitido depositos menores que zero.") #levanta a excecao
-        else:
-            raise InvalidPasswordException("Senha inválida.")
+        self.require_login()
 
+        if value > 0: 
+            self._balance += deposit
+            transaction = Transaction("Depósito - Conta Poupança", value, self) 
+            self._transactions.append(transaction)
+            transaction.get_receipt()
+        else:
+            raise InvalidValueDepositException("Não é permitido depositos menores que zero.") #levanta a excecao
 #---------------------------------------------------------------------------------

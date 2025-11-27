@@ -11,7 +11,7 @@ class Authenticate(ABC):
         pass
     
     @abstractmethod
-    def logout(self) -> bool:
+    def logout(self):
         pass
 
         
