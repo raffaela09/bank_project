@@ -13,3 +13,7 @@ class InvalidPasswordException(Exception):
 class RequireLoginException(Exception):
     "Excecao para acoes que precisam de login"
     pass
+
+class AccountAlreadyExistsException(Exception):
+    "Excecao para conta ja existente."
+    pass

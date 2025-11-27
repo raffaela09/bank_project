@@ -83,7 +83,7 @@ class Account(Authenticate, ABC):
 
 #Classe de conta corrente
 #Conta corrente -> ela pode ficar com saldo negativo -> ja que tem um limite disponivel, entao é permitido saques onde seja menor que limite + saldo -> passar para docstrings
-class Current_account(Account, Tax):
+class CurrentAccount(Account, Tax):
     def __init__(self, number: str, client: str, balance: float, password: str,  limit: float):
         super().__init__(number, client, balance, password)
         self._limit = limit
@@ -143,7 +143,7 @@ class Current_account(Account, Tax):
 #---------------------------------------------------------------------------------
 
 #Conta poupanca  -> contrato(interface) é a classe Earning(ganhando/rendendo)     
-class Savings_account(Account, Earning):
+class SavingsAccount(Account, Earning):
     def __init__(self, number: str, titular: str, balance: float, password: str, earnings: float):
         super().__init__(number, titular, balance, password)
         self._earnings = earnings

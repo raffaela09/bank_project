@@ -1,5 +1,15 @@
-def create_current_account():
+from Exceptions import AccountAlreadyExistsException
+def inputs_create_current_account():
     number = input("Número da conta: ")
     client = input("Cliente: ")
     balance = float(input("Saldo: "))
-    password = in
+    password = input("Senha: ")
+    limit = float(input("Limite: "))
+    return number, client, balance, password, limit
+
+def create_account(accounts, number, account):
+    if number in accounts:
+        raise AccountAlreadyExistsException("Número de conta já existente.")
+    accounts[number] = account
+    print("Conta criada com sucesso!")
+    return account
