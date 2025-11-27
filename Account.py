@@ -7,6 +7,7 @@ from Earning import Earning
 from datetime import datetime
 from Exceptions import InvalidValueDepositException, InvalidBalanceException, InvalidPasswordException, RequireLoginException
 
+#talvez passar numero de conta no login? 
 #Classe de conta, abstrata
 class Account(Authenticate, ABC):
     def __init__(self, number: str, client: str, balance: float, password: str):

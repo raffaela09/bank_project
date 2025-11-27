@@ -5,7 +5,7 @@ def menu():
     accounts = {}
 
     while True:
-        print("1 - Criar conta corrente.\n2 - Criar conta poupança.\n3 - Fazer login.\n 4 - Sair.")
+        print("1 - Criar conta corrente.\n2 - Criar conta poupança.\n3 - Fazer login.\n4 - Sair.")
         option = int(input("Digite uma opção: "))
         if option == 1:
             number, client, balance, password, limit = inputs_create_current_account()
@@ -34,6 +34,9 @@ def menu():
                     print(e)
             else:
                 print("Conta inexistente!") #verificar se precisa de exception
-                
+        elif option == 4:
+            print("Até mais!!")
+            break
+
 if __name__ == "__main__":
     menu()
