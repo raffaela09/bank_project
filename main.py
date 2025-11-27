@@ -1,4 +1,4 @@
-from functions_main import inputs_create_current_account, create_account, inputs_create_savings_account, inputs_login
+from functions_main import inputs_create_current_account, create_account, inputs_create_savings_account, inputs_login, menu_account
 from Account import CurrentAccount, SavingsAccount
 from Exceptions import AccountAlreadyExistsException, InvalidPasswordException
 def menu():
@@ -30,6 +30,7 @@ def menu():
                     account = accounts[number_login]
                     account.login(password_login)
                     print("Login efetuado! Bem vindo!")
+                    menu_account(account)
                 except InvalidPasswordException as e: 
                     print(e)
             else:

@@ -108,7 +108,7 @@ class CurrentAccount(Account, Tax):
         self._tax = value
 
     #saque    
-    def withdraw(self, value: float, password: str):
+    def withdraw(self, value: float):
         withdraw = value + self._tax #taxa por saque é 10 reais
 
         available = self._balance + self._limit 
@@ -124,7 +124,7 @@ class CurrentAccount(Account, Tax):
                 raise InvalidBalanceException("Saldo insuficiente.") #levanta a excecao
 
     #deposito        
-    def deposit(self, value:float, password: str):
+    def deposit(self, value:float):
         deposit = value
         
         self.require_login()
@@ -154,7 +154,7 @@ class SavingsAccount(Account, Earning):
         return self.balance * self._earnings
 
     #na conta poupanca, nao é permitido que a o saldo fique negativo
-    def withdraw(self, value: float, password: str):
+    def withdraw(self, value: float):
         self.require_login()
         if value <= self._balance:
             self._balance -= value
@@ -164,7 +164,7 @@ class SavingsAccount(Account, Earning):
         else:
             raise InvalidBalanceException("Saldo insuficiente.") #levanta a excecao
 
-    def deposit(self, value:float, password: str):
+    def deposit(self, value:float):
         deposit = value
         self.require_login()
 

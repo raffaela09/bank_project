@@ -27,3 +27,17 @@ def inputs_login():
     number = input("Número da conta: ")
     password = input("Senha: ")
     return number, password
+
+def menu_account(account):
+    print("\n1 - Fazer saque.\n2 - Fazer Depósito.\n3 - Logout ")
+    option = int(input("Digite uma opção: "))
+
+    if option == 1:
+        value = float(input("Valor: "))
+        account.withdraw(value)
+
+    elif option == 2:
+        value_2 = float(input("Valor: "))
+        account.deposit(value_2)
+    elif option == 3:
+        account.logout()
